@@ -37,7 +37,7 @@ it to /tmp or something.
 Setting up a user on AWS with their own credentials is a good idea here.
 Download the user's access key and secret key to your local machine. You can
 then use the AWS command line tools to set up a config that will work, but
-you're going to want to store them, and make sure they're working as,
+you're going to want to store them as, and make sure they're working as,
 environment variables, because we'll need to be able to do that later with
 the Heroku config. It's also a good idea to store the bucket name as an
 environment varaible because depending on how you set up your access rules for
@@ -46,7 +46,7 @@ anywhere public.
 
 I tried a few different techniques for talking to s3, but eventually settled
 on using their recommended boto3 library. I made a quick test file
-(boto3_test.py) to make sure all my environment variables were set correctly
+(``boto3_test.py``) to make sure all my environment variables were set correctly
 and used it to play around a little with what information I could get about
 the bucket. I also used the test file to identify a couple files I already had
 sitting around that would be good test cases.
@@ -64,7 +64,7 @@ time to make sure that you can deploy and run on Heroku so that shifting to
 a background worker won't be so difficult and will only be a small change
 instead of trying to get everything running at once.
 
-Make sure you use heroku config to set the environment variables you've been
+Make sure you use ``heroku config`` to set the environment variables you've been
 using locally to match on Heroku. And don't forget to pip freeze >
 requirements.txt so you have all the libraries you need. Your Procfile at this
 point should just have a single web: line. Also remember to turn off debugging,
@@ -76,7 +76,7 @@ deploy. Is it working? Great!
 #### Step 5: Set up Redis
 
 I used this doc to get Redis up and running on my computer:
-http://jasdeep.ca/2012/05/installing-redis-on-mac-os-x/. Because I'm not a huge
+http://jasdeep.ca/2012/05/installing-redis-on-mac-os-x/ because I'm not a huge
 fan of homebrew or macports. I want everything on my computer to be there for
 a reason and I want to know what installed where.
 
@@ -87,26 +87,28 @@ https://devcenter.heroku.com/articles/python-rq
 
 Things to note:
 
-- Check your heroku config for the correct Redis URL. Mine was different
+- Check your ``heroku config`` for the correct Redis URL. Mine was different
 than the one in the doc.
-- You can't run worker.py locally unless you have redis-server running.
+- You can't run ``worker.py`` locally unless you have redis-server running.
 
 Just like in the doc, I moved the file upload to s3 in to a separate function
-in a separate file called utils.py, then included it in my app.py and used the
-queueing function from rq to offload the upload to the worker process. The
-worker.py file needed no modifications, I copied it word for word from the doc.
+in a separate file called ``utils.py``, then included it in my ``app.py`` and
+used the queueing function from rq to offload the upload to the worker process.
+The worker.py file needed no modifications, I copied it word for word from the
+doc.
 
 #### Step 7: Add worker to Procfile
 
-Edit the Procfile to include worker: python worker.py. Start up a redis-server
-locally and try running heroku local. Do your pages load? Can you upload a file
-to s3? Does it eventually show up in the bucket list? Whoohoo! It worked!
+Edit the Procfile to include ``worker: python worker.py``. Start up a
+redis-server locally and try running ``heroku local``. Do your pages load?
+Can you upload a file to s3? Does it eventually show up in the bucket list?
+Whoohoo! It worked!
 
 #### Step 8: Deploy! (again)
 
 If you didn't yet, now's the right time to provision Redis on Heroku. Once
-provisioned, make sure the Redis URL (heroku config) is what you're pointed
-toward in your worker.py.
+provisioned, make sure the Redis URL (``heroku config``) is what you're pointed
+toward in your ``worker.py``.
 
 Commit and push to GitHub and Heroku.
 
