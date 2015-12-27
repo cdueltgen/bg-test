@@ -44,5 +44,14 @@ def upload_file():
     else:
         return render_template('failure.html')
 
+
+@app.route('/bucketlist')
+def list_bucket():
+    s3_bucket = os.environ.get('S3_BUCKET')
+    s3 = boto3.resource('s3')
+    objects = s3.Bucket(s3_bucket).objects.all()
+    return render_template('bucketlist.html', objects=objects)
+
+
 if __name__ == '__main__':
     app.run(debug=DEBUG)

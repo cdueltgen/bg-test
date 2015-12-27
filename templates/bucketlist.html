@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>file name</th>
+            <th>last modified</th>
+        </tr>
+        {% for obj in objects %}
+        <tr>
+            <td>{{ obj.key }}</td>
+            <td>{{ obj.last_modified }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
