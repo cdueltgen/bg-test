@@ -1,7 +1,10 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 from werkzeug import secure_filename
 import boto3
+from rq import Queue
+from worker import conn
+from utils import upload_queue
 
 # UPLOAD_FOLDER = '/tmp'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -16,6 +19,12 @@ app = Flask(__name__)
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+# def upload_queue(filename, file_contents):
+#     s3 = boto3.resource('s3')
+#     s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file_contents)
+#     return
 
 
 @app.route('/')
@@ -35,8 +44,11 @@ def upload_file():
         file_contents = f.read()
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
-            s3 = boto3.resource('s3')
-            s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file_contents)
+            q = Queue(connection=conn)
+            q.enqueue(upload_queue, filename, file_contents)
+            # upload_queue(filename, file_contents)
+            # s3 = boto3.resource('s3')
+            # s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file_contents)
             # This was for testing locally
             # f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return render_template('success.html', filename=filename)
