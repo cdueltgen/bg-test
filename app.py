@@ -7,6 +7,7 @@ import boto3
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 DEBUG = "NO_DEBUG" not in os.environ
 S3_BUCKET = os.environ.get('S3_BUCKET')
+PORT = int(os.environ.get("PORT", 5000))
 
 app = Flask(__name__)
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -53,4 +54,4 @@ def list_bucket():
 
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG)
+    app.run(debug=DEBUG, host="0.0.0.0", port=PORT)
