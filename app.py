@@ -20,7 +20,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-    return "HELLO!"
+    return render_template("hello.html")
 
 
 @app.route('/upload_form')
