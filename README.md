@@ -65,8 +65,8 @@ a background worker won't be so difficult and will only be a small change
 instead of trying to get everything running at once.
 
 Make sure you use ``heroku config`` to set the environment variables you've been
-using locally to match on Heroku. And don't forget to pip freeze >
-requirements.txt so you have all the libraries you need. Your Procfile at this
+using locally to match on Heroku. And don't forget to ``pip freeze >
+requirements.txt`` so you have all the libraries you need. Your Procfile at this
 point should just have a single web: line. Also remember to turn off debugging,
 make the ports available, and set your host correctly.
 
@@ -94,8 +94,8 @@ than the one in the doc.
 Just like in the doc, I moved the file upload to s3 in to a separate function
 in a separate file called ``utils.py``, then included it in my ``app.py`` and
 used the queueing function from rq to offload the upload to the worker process.
-The worker.py file needed no modifications, I copied it word for word from the
-doc.
+The ``worker.py`` file needed no modifications, I copied it word for word from
+the doc.
 
 #### Step 7: Add worker to Procfile
 
