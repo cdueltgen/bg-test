@@ -1,5 +1,7 @@
-import boto3
 import os
+import boto3
+
+from make_report import make_pdf
 
 small_img = '/tmp/IMG_0807.JPG'
 large_img = '/tmp/DSC00006.JPG'
@@ -19,9 +21,13 @@ s3 = boto3.resource('s3')
 # data = open(large_img, 'rb')
 # s3.Bucket(s3_bucket).put_object(Key='test-big.jpg', Body=data)
 
-objects = s3.Bucket(s3_bucket).objects.all()
+# objects = s3.Bucket(s3_bucket).objects.all()
 
-print objects
+# print objects
 
-for obj in objects:
-    print obj.last_modified
+# for obj in objects:
+#     print obj.last_modified
+
+report = make_pdf()
+data = open(report, 'rb')
+s3.Bucket(s3_bucket).put_object(Key=report, Body=data)
