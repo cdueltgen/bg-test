@@ -31,12 +31,17 @@ def make_pdf():
     return report_name
 
 
-def upload_queue(filename, file_contents):
+def make_report():
     """Upload to s3 function for use with the worker queue."""
     # random wait time to simulate long report generation
     wait_time = randint(1, 45)
     sleep(wait_time)
 
+    filename = make_pdf()
+    file_contents = open(filename, 'rb').read()
+
     s3 = boto3.resource('s3')
     s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file_contents)
+    #clean up after yourself
+    os.remove(filename)
     return
