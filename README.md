@@ -5,17 +5,13 @@ long processing jobs to the background and not have them beholden to the web
 request. Web requests will timeout after 30 seconds, which can lead to
 unpredictable or undesirable side effects.
 
-I chose to use uploading of images to Amazon s3 as my background process. This
-works great unless you're on a slow internet connection for uploads, then just
-sending the file to the server before it even gets sent to s3 can timeout. I
-deliberately didn't do a direct upload to s3 with JavaScript because I wanted
-to go through the server. If you run it locally, then the only hangup is in the
-upload to s3, but running on the remote server right now it's a crapshoot with
-large files.
+I'm using generation of "Fancy Report" pdfs as my blocking process, with
+reportlab doing the heavy lifting. Since these reports don't take very
+long to create, I've added a random wait time of up to 45 seconds to the
+queued jobs, to illustrate the point of using a background worker.
 
-Although I'm using image upload to test, using a background worker process is
-very well suited for dealing with databases, generating reports, making pdfs,
-or anything that takes a while and is likely to time out a web request.
+While I'm using fake pdfs to upload, this pattern is useful for shifting
+any lengthly process away from the web response.
 
 ### You will need:
 
@@ -27,10 +23,9 @@ or anything that takes a while and is likely to time out a web request.
 
 #### Step 1: Make a Flask app
 
-Make yourself a very small Flask app, with a landing page, a page with a form
-to upload from, and whereever you want to end up after the upload. Verify that
-you can use Flask and the form to upload a file to your local filesystem. Send
-it to /tmp or something.
+Make yourself a very small Flask app, with the minimum pages you need to test.
+Verify that you can use Flask and the form or button to upload a file to your
+local filesystem. Send it to /tmp or something.
 
 #### Step 2: Test connection to s3
 
