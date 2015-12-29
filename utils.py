@@ -1,12 +1,15 @@
 import os
 from datetime import datetime
+from random import randint
+from time import sleep
 
 import boto3
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import cm, mm, inch, pica
+from reportlab.lib.units import inch
 
 S3_BUCKET = os.environ.get('S3_BUCKET')
+
 
 def make_pdf():
     """Generate a pdf report."""
@@ -27,9 +30,12 @@ def make_pdf():
     pdf.save()
     return report_name
 
+
 def upload_queue(filename, file_contents):
     """Upload to s3 function for use with the worker queue."""
-    # file_contents = f.read()
+    # random wait time to simulate long report generation
+    wait_time = randint(1, 45)
+    sleep(wait_time)
 
     s3 = boto3.resource('s3')
     s3.Bucket(S3_BUCKET).put_object(Key=filename, Body=file_contents)
