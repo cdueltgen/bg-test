@@ -6,7 +6,7 @@ After completing this unit, you will be able to:
 
 - Describe what background workers are.
 - Describe use cases for background workers.
-- Create and connect to a woker job queue.
+- Create and connect to a worker job queue.
 - Move your blocking function to a separate file.
 - Adjust your route to use your queue.
 
